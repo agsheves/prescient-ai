@@ -1,3 +1,5 @@
+# utilities.py
+
 import itertools
 import threading
 import time
@@ -9,7 +11,8 @@ import json
 with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
-#api_key = config_data['api_key']
+
+api_key = config_data['api_key']
 
 #Makes a loading spinner
 class Spinner:

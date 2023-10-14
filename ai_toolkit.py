@@ -1,3 +1,5 @@
+# ai_toolkit.py
+
 import numpy as np
 import os
 import openai
@@ -10,6 +12,7 @@ with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
 openai.api_key = config_data['OPENAI_API_KEY']
+
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
 
 

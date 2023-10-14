@@ -1,3 +1,6 @@
+##main.py
+
+
 # Test bed for the main AI ERM components
 from utilities import Spinner
 import time
@@ -11,12 +14,13 @@ init()
 now = datetime.datetime.now()
 now_formatted = now.strftime("%b-%d-%Y %H:%M")
 print('Welcome to the risk management copilot')
-print("Loading")
+with Spinner("Loading"):
+    time.sleep(2)
 print("\nFired up and ready to go\n")
 print(Fore.YELLOW + """Hi, I'm your risk managementcopilot, here to assist you with risk, security and crisis tasks.\n
 Every thing we do is via this chat interface but there's an extensive toolkit that I can deploy for you. This includes: country risk analysis, enterprise risk assessment, crisis preparadness and ERM compliance. There is also general chat and web search available.\n
 **Note**
-To make sure I am using the right tool for the job, I will periodically check that we are on the right track. Please correct me if I am going in the wrong direction. If you need to switch focus, e.g. from country risk to contogency planning, simply write 'SWITCH FOCUS' and I'll reorientate.\n
+To make sure I am using the right tool for the job, I will periodically check that we are on the right track. Please correct me if I am going in the wrong direction. If you need to switch focus, e.g. from country risk to contigency planning, simply write 'SWITCH FOCUS' and I'll reorientate.\n
 Let's get started.\n""")
 
 print("Please enter your name so we can get started")
