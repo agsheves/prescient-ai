@@ -122,4 +122,7 @@ def get_country_news_newsdata(country_name):
         print(f"Date: {news['pubDate']}")
         print("\n")
 
-    return country_articles_list
+    news_articles_str = "\n".join([f"Headline: {article['Headline']}\nSource: {article['Source']}\nSummary: {article['Summary']}\nLink: {article['Link']}\nDate: {article['pubDate']}\n" for article in country_articles_list])
+
+    return news_articles_str
+    print(news_articles_str)

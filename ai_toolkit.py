@@ -44,8 +44,7 @@ def task_routing(user_input):
     # Modify the conversation history to include country_news
     country_conversation_history = [
         {"role": "system", "content": "You are an expert geopolitical and security analyst. You produce succinct, insightful country risk assessments looking at both the obvious more subtle factors. Keep your answers short and offer to provide more detail if necessary. Prompt the user for additional context where necessary."},
-        {"role": "user", "content": user_input},
-        {"role": "assistant", "content": country_news}  # Include country_news as a message
+        {"role": "user", "content": user_input}
     ]
     
     country_risk_chat(user_input, country_conversation_history, country_wiki)
@@ -99,12 +98,7 @@ country_conversation_history = [
 ]
 
 # Modify the country_risk_chat function
-# Modify the country_risk_chat function
 def country_risk_chat(user_input, news_articles, country_wiki):
-    # Create a string containing the news articles
-    news_articles_str = "\n".join([f"Headline: {article['Headline']}\nSummary: {article['Summary']}\nLink: {article['Link']}\n" for article in news_articles])
-
-    # Add the news articles to the response
     assistant_response = [
         {"role": "assistant", "content": f"Here's the latest news related to {country_name}:\n{news_articles_str}"},
         {"role": "user", "content": user_input}
