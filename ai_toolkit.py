@@ -39,6 +39,7 @@ def task_routing(user_input):
     print(Fore.WHITE + "Staring the country risk tool...")
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
     country_wiki = wikipedia_search(country_name)
+    country_news = get_country_news_newsdata(country_name)
     
     # Modify the conversation history to include country_news
     country_conversation_history = [
@@ -97,26 +98,29 @@ country_conversation_history = [
   {"role": "system", "content": "You are an expert geopolitical and security analyst. You produce succinct, insightful country risk assessments looking at both the obvious more subtle factors. Keep your answers short and offer to provide more detail if necessary. Prompt the user for addituional context where necessary."}
 ]
 
-def country_risk_chat(user_input, country_news, country_wiki):
-  global country_conversation_history  # Access the global conversation history
-  country_conversation_history.append({"role": "user", "content": user_input})
+# Modify the country_risk_chat function
+# Modify the country_risk_chat function
+def country_risk_chat(user_input, news_articles, country_wiki):
+    # Create a string containing the news articles
+    news_articles_str = "\n".join([f"Headline: {article['Headline']}\nSummary: {article['Summary']}\nLink: {article['Link']}\n" for article in news_articles])
 
+    # Add the news articles to the response
+    assistant_response = [
+        {"role": "assistant", "content": f"Here's the latest news related to {country_name}:\n{news_articles_str}"},
+        {"role": "user", "content": user_input}
+    ]
 
-  if country_news:
-    country_conversation_history.append({"role": "assistant", "content": country_news})
-  if country_wiki:
-    country_conversation_history.append({"role": "assistant", "content": country_wiki})
+    # Use the assistant_response in the Chat API call
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=assistant_response,
+        stream=False
+    )
 
-  response = openai.ChatCompletion.create(
-      model="gpt-4",
-      messages=country_conversation_history,
-      stream=False
-  )
+    assistant_msg = response.choices[0].message['content']
+    country_conversation_history.append({"role": "assistant", "content": assistant_msg})
 
-  assistant_msg = response.choices[0].message['content']
-  country_conversation_history.append({"role": "assistant", "content": assistant_msg})
-
-  print(Fore.WHITE + assistant_msg)
-  print("\n")
-  user_input = input(Fore.BLUE + "-->")
-  country_risk_chat(user_input, None, None)  # Pass None for country_wiki during subsequent chat interactions
+    print(Fore.WHITE + assistant_msg)
+    print("\n")
+    user_input = input(Fore.BLUE + "-->")
+    country_risk_chat(user_input, None, None)  # Pass None for country_wiki during subsequent chat interactions
