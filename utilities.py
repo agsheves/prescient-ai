@@ -3,10 +3,14 @@ import threading
 import time
 from ai_toolkit import task_routing
 from colorama import init, Fore, Style
-from secret_files.secret_keys import worldnews_api_key
-init()
+import json
 
-worldnews_api_key = worldnews_api_key
+
+with open('config.json', 'r') as config_file:
+    config_data = json.load(config_file)
+
+#api_key = config_data['api_key']
+
 #Makes a loading spinner
 class Spinner:
     def __init__(self, message):

@@ -2,13 +2,14 @@ import numpy as np
 import os
 import openai
 from colorama import init, Fore, Style
-from llamaindex import wikipedia_search
-from llamaindex import get_country_news
-init()
+from llama_index import wikipedia_search
+from llama_index import get_country_news
+import json
 
-from secret_files.secret_keys import OPENAI_API_KEY
+with open('config.json', 'r') as config_file:
+    config_data = json.load(config_file)
 
-openai.api_key = OPENAI_API_KEY
+openai.api_key = config_data['OPENAI_API_KEY']
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
 
 

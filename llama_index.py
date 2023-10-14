@@ -3,16 +3,14 @@
 import llama_index as llama_index
 import requests
 import wikipedia
+import json
 
-from llama_index.agent import OpenAIAgent
-from llama_index.tools.function_tool import FunctionTool
-from llama_index.tools.tool_spec.base import BaseToolSpec
+# Open and read the config.json file
+with open('config.json', 'r') as config_file:
+    config_data = json.load(config_file)
 
-from typing import Optional, List
 
-from secret_files.secret_keys import worldnews_api_key
-
-worldnews_api_key = worldnews_api_key
+worldnews_api_key = config_data['WORLD_NEWS_API_KEY']
 
 
 #Wikipedia search
