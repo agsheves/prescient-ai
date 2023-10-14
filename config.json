@@ -1,0 +1,6 @@
+{
+    "OPENAI_API_KEY": "your_key_here",
+    "WORLD_NEWS_API_KEY": "another_key_here",
+    "MODEL_NAME": "gpt-4",
+    "OTHER_SETTINGS": "value"
+  }
