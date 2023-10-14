@@ -5,7 +5,8 @@ import os
 import openai
 from colorama import init, Fore, Style
 from llama_index import wikipedia_search
-from llama_index import get_country_news
+from llama_index import get_country_news_worldnews
+from llama_index import get_country_news_newsdata
 import json
 
 with open('config.json', 'r') as config_file:
@@ -38,8 +39,16 @@ def task_routing(user_input):
     print(Fore.WHITE + "Staring the country risk tool...")
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
     country_wiki = wikipedia_search(country_name)
-    country_news = get_country_news(country_name)
-    country_risk_chat(user_input, country_news, country_wiki)
+    
+    # Modify the conversation history to include country_news
+    country_conversation_history = [
+        {"role": "system", "content": "You are an expert geopolitical and security analyst. You produce succinct, insightful country risk assessments looking at both the obvious more subtle factors. Keep your answers short and offer to provide more detail if necessary. Prompt the user for additional context where necessary."},
+        {"role": "user", "content": user_input},
+        {"role": "assistant", "content": country_news}  # Include country_news as a message
+    ]
+    
+    country_risk_chat(user_input, country_conversation_history, country_wiki)
+
   elif 'auditor' in assistant_msg:
     print(Fore.WHITE + "--Starting the auditor tool--")
   elif 'general researcher' in assistant_msg:

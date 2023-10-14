@@ -114,4 +114,12 @@ def get_country_news_newsdata(country_name):
             'publication': publication
         })    
 
+    for news in country_articles_list:
+        print(f"Headline: {news['Headline']}")
+        print(f"Source: {news['Source']}")
+        print(f"Summary: {news['Summary']}")
+        print(f"Link: {news['Link']}")
+        print(f"Date: {news['pubDate']}")
+        print("\n")
+
     return country_articles_list

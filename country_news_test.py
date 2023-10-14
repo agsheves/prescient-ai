@@ -20,10 +20,11 @@ print(news_summaries)
 # Display the results
 for index, news_summary in enumerate(news_summaries, start=1):
     print(f"News Article {index}:")
-    print(f"Headline: {news_summary['headline']}")
-    print(f"Publication: {news_summary['publication']}")
-    print(f"Date: {news_summary['date']}")
-    print(f"Summary: {news_summary['summary']}\n")
+    print(f"Headline: {news_summary['Headline']}")
+    print(f"Source: {news_summary['Source']}")
+    print(f"Date: {news_summary['pubDate']}")
+    print(f"Summary: {news_summary['Summary']}\n")
+
 
 
 

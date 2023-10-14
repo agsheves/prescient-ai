@@ -12,7 +12,6 @@ with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
 
-api_key = config_data['api_key']
 
 #Makes a loading spinner
 class Spinner:
@@ -42,7 +41,5 @@ def check_intent(user_name):
   user_input = input(Fore.BLUE + "-->")
   task_routing(user_input)
 
-## Gets the latest news for the country
-#Calls the WorldNews API and requests stories
-#API reference is here https://worldnewsapi.com/
+
 
