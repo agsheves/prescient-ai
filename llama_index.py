@@ -83,7 +83,7 @@ def write_news_summary(country_articles_list):
             },
             {
                 "role": "user",
-                "content": country_articles_list
+                "content": json.dumps(country_articles_list)
             }
         ]
     )
