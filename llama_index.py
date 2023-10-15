@@ -74,7 +74,7 @@ def get_country_news_newsdata(api_key, country_name):
 
 def write_news_summary(country_articles_list):
     news_summary = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo-16k",
         temperature=0,
         messages=[
             {
