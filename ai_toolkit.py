@@ -5,8 +5,6 @@ import os
 import openai
 from colorama import init, Fore, Style
 from llama_index import wikipedia_search
-from llama_index import get_country_news_worldnews
-from llama_index import get_country_news_newsdata
 from llama_index import write_news_summary
 from llama_index import search_news
 import json
