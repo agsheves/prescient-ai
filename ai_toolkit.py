@@ -15,8 +15,10 @@ with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
 openai.api_key = config_data['OPENAI_API_KEY']
+newsData_API = config_data['newsData_api_key']
 
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
+
 
 
 
@@ -38,10 +40,11 @@ def task_routing(user_input):
   
   # Selects the specialized tool for the task or defaults to default main model
   if 'country risk analyst' in assistant_msg:
+    api_key = newsData_API
     print(Fore.WHITE + "Staring the country risk tool...")
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
     country_wiki = wikipedia_search(country_name)
-    country_news = search_news(country_name)
+    country_news = search_news(api_key, country_name)
     summarized_news = write_news_summary(country_news)
 
     
