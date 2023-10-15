@@ -9,7 +9,6 @@ from llama_index import write_news_summary
 from llama_index import search_news
 import json
 import warnings
-from utilities import Spinner
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -21,6 +20,7 @@ with open('config.json', 'r') as config_file:
 
 openai.api_key = config_data['OPENAI_API_KEY']
 newsData_API = config_data['newsData_api_key']
+api_key = newsData_API
 
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
 
@@ -48,8 +48,6 @@ def task_routing(user_input):
     api_key = newsData_API
     print(Fore.WHITE + "Staring the country risk tool...")
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
-    with Spinner("Loading Country Analysis Module"):
-      time.sleep(1)
     run_country_analyst_persona(country_name)
   elif 'auditor' in assistant_msg:
     print(Fore.WHITE + "--Starting the auditor tool--")
@@ -93,32 +91,23 @@ def default_chat(user_input):
 # Country Risk Persona --------------------------------------------
 # Gets information for the country and runs the country risk chat
 def run_country_analyst_persona(country_name):
-    with Spinner("Getting Country Data"):
-      time.sleep(1)
+    print("Getting Country Data...")
     country_wiki = wikipedia_search(country_name)
-    with Spinner("Getting Latest News"):
-      time.sleep(1)
+    print("Getting Latest News...")
     country_news = search_news(api_key, country_name)
     summarized_news = write_news_summary(country_news)
-    print(f"Let's start with some basic infoemation about{country_name}.\nHere's an overview of {country_name} from Wikipedia.")
+    print(f"Let's start with some basic information about {country_name}.\nHere's an overview of {country_name} from Wikipedia.")
     print("Wiki here")
     print(f"\nAnd here's the latest news from {country_name}.\n")
     print(summarized_news)
+    user_input = (f"I need a detailed country risk assessment for {country_name}.")
+    country_risk_chat(user_input, summarized_news, country_wiki, [])
 
-    # Modify the conversation history to include country_news
+def country_risk_chat(user_input, summarized_news, country_wiki, country_conversation_history):
     country_conversation_history = [
         {"role": "system", "content": "You are an expert geopolitical and security analyst. You produce succinct, insightful country risk assessments looking at both the obvious more subtle factors. Keep your answers short and offer to provide more detail if necessary. Prompt the user for additional context where necessary."},
         {"role": "user", "content": user_input}
     ]
-    
-    country_risk_chat(user_input, summarized_news, country_news, country_wiki, country_conversation_history)
-
-
-
-def country_risk_chat(user_input, summarized_news, country_news, country_wiki, country_conversation_history):
-
-    # Append the latest user message
-    country_conversation_history.append({"role": "user", "content": user_input})
     
     # Prepare system message for this turn
     system_content = ""
@@ -144,8 +133,7 @@ def country_risk_chat(user_input, summarized_news, country_news, country_wiki, c
     print(Fore.WHITE + assistant_msg)
     print("\n")
     next_user_input = input(Fore.BLUE + "-->")
-    country_risk_chat(next_user_input, summarized_news, coun, country_wiki)
-
+    country_risk_chat(next_user_input, summarized_news, country_wiki, country_conversation_history)
 
    
    
