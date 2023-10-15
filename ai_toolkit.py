@@ -8,6 +8,12 @@ from llama_index import wikipedia_search
 from llama_index import write_news_summary
 from llama_index import search_news
 import json
+import warnings
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    # Your code that triggers the warning
+
 
 with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
@@ -103,13 +109,18 @@ country_conversation_history = [
 ]
 
 # Modify the country_risk_chat function
-def country_risk_chat(user_input, summarized_news, full_news, country_wiki):
+def country_risk_chat(user_input, summarized_news, coun, country_wiki):
     # Show summarized news first
     print(Fore.WHITE + f"Here's a summary of the latest news:\n{summarized_news}")
 
-    # Prepare assistant's message for risk assessment
+    system_content = f"You are an expert in geopolitical and security analysis. For this risk assessment, consider the following summarized news:"
+    if summarized_news is not None:
+       system_content += f"\n{summarized_news}"
+    if country_wiki is not None:
+      system_content += f"\n{country_wiki[:200]}..."
+
     assistant_response = [
-        {"role": "system", "content": f"You are an expert in geopolitical and security analysis. For this risk assessment, consider the following summarized news and Wikipedia information:\n{summarized_news}\n{country_wiki[:200]}..."},
+        {"role": "system", "content": system_content},
         {"role": "user", "content": user_input}
     ]
 
@@ -121,7 +132,10 @@ def country_risk_chat(user_input, summarized_news, full_news, country_wiki):
     )
     
     assistant_msg = response.choices[0].message['content']
-    print(Fore.WHITE + assistant_msg)
-    print("\n")
-    next_user_input = input(Fore.BLUE + "-->")
-    country_risk_chat(next_user_input, None, None, None)
+    while True:  
+        print(Fore.WHITE + assistant_msg)
+        print("\n")
+        next_user_input = input(Fore.BLUE + "-->")
+        if next_user_input.lower() == 'exit':  # Allow the user to exit the loop
+            break
+        country_risk_chat(next_user_input, None, None, None)

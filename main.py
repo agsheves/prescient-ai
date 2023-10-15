@@ -9,7 +9,13 @@ from ai_toolkit import default_chat
 from utilities import check_intent
 import datetime
 from colorama import init, Fore, Style
+import warnings
+
 init()
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore")
+    # Your code that triggers the warning
 
 now = datetime.datetime.now()
 now_formatted = now.strftime("%b-%d-%Y %H:%M")
