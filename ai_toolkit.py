@@ -103,39 +103,40 @@ def default_chat(user_input):
 
 ## Country Risk
 ## Uses a tailored prompt for country risk discussions
-
 country_conversation_history = [
   {"role": "system", "content": "You are an expert geopolitical and security analyst. You produce succinct, insightful country risk assessments looking at both the obvious more subtle factors. Keep your answers short and offer to provide more detail if necessary. Prompt the user for addituional context where necessary."}
 ]
 
-# Modify the country_risk_chat function
 def country_risk_chat(user_input, summarized_news, coun, country_wiki):
-    # Show summarized news first
-    print(Fore.WHITE + f"Here's a summary of the latest news:\n{summarized_news}")
+    if summarized_news:
+        print(Fore.WHITE + f"Here's a summary of the latest news:\n{summarized_news}")
 
-    system_content = f"You are an expert in geopolitical and security analysis. For this risk assessment, consider the following summarized news:"
+    # Append the latest user message
+    country_conversation_history.append({"role": "user", "content": user_input})
+    
+    # Prepare system message for this turn
+    system_content = ""
     if summarized_news is not None:
-       system_content += f"\n{summarized_news}"
+        system_content += f"\n{summarized_news}"
     if country_wiki is not None:
-      system_content += f"\n{country_wiki[:200]}..."
-
-    assistant_response = [
-        {"role": "system", "content": system_content},
-        {"role": "user", "content": user_input}
-    ]
+        system_content += f"\n{country_wiki[:200]}..."
+    if system_content:
+        country_conversation_history.append({"role": "system", "content": system_content})
 
     # Use the assistant_response in the Chat API call
     response = openai.ChatCompletion.create(
         model="gpt-4",
-        messages=assistant_response,
+        messages=country_conversation_history,
         stream=False
     )
     
     assistant_msg = response.choices[0].message['content']
-    while True:  
-        print(Fore.WHITE + assistant_msg)
-        print("\n")
-        next_user_input = input(Fore.BLUE + "-->")
-        if next_user_input.lower() == 'exit':  # Allow the user to exit the loop
-            break
-        country_risk_chat(next_user_input, None, None, None)
+    
+    # Append the latest assistant message
+    country_conversation_history.append({"role": "assistant", "content": assistant_msg})
+
+    print(Fore.WHITE + assistant_msg)
+    print("\n")
+    next_user_input = input(Fore.BLUE + "-->")
+    country_risk_chat(next_user_input, summarized_news, coun, country_wiki)
+
