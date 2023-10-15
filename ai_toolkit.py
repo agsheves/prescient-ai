@@ -9,6 +9,8 @@ from llama_index import write_news_summary
 from llama_index import search_news
 import json
 import warnings
+import streamlit as st
+
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -22,9 +24,14 @@ openai.api_key = config_data['OPENAI_API_KEY']
 newsData_API = config_data['newsData_api_key']
 api_key = newsData_API
 
+## Streamlit keys
+
+openai.api_key = st.secrets['OPENAI_API_KEY']
+newsData_API = st.secrets['newsData_api_key']
+
+api_key = newsData_API
+
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
-
-
 
 
 ## Task routing assesses the user input and chooses the appropriate tool for the job

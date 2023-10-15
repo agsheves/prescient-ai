@@ -4,12 +4,17 @@ import requests
 import json
 from llama_index import get_country_news_worldnews  # Import the function you want to test
 from llama_index import get_country_news_newsdata
+import streamlit as st
 
 # Open and read the config.json file
 with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
 worldnews_api_key = config_data['WORLD_NEWS_API_KEY']
+
+#Streamlit keys
+
+worldnews_api_key = st.secrets['WORLD_NEWS_API_KEY']
 
 
 # Call the function with a country name

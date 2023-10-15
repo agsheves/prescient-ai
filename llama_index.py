@@ -7,6 +7,7 @@ import requests
 import wikipedia
 import json
 import openai
+import streamlit as st
 
 # Open and read the config.json file
 with open('config.json', 'r') as config_file:
@@ -15,6 +16,10 @@ with open('config.json', 'r') as config_file:
 
 worldnews_api_key = config_data['WORLD_NEWS_API_KEY']
 newsData_api_key = config_data['newsData_api_key']
+
+#Streamlit secrets
+worldnews_api_key = st.secrets['WORLD_NEWS_API_KEY']
+newsData_api_key = st.secrets['newsData_api_key']
 
 
 #Wikipedia search
