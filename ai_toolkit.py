@@ -7,6 +7,7 @@ from colorama import init, Fore, Style
 from llama_index import wikipedia_search
 from llama_index import get_country_news_worldnews
 from llama_index import get_country_news_newsdata
+from llama_index import write_news_summary
 import json
 
 with open('config.json', 'r') as config_file:
@@ -40,6 +41,8 @@ def task_routing(user_input):
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
     country_wiki = wikipedia_search(country_name)
     country_news = get_country_news_newsdata(country_name)
+    summarized_news = write_news_summary(country_news)
+
     
     # Modify the conversation history to include country_news
     country_conversation_history = [
@@ -47,7 +50,7 @@ def task_routing(user_input):
         {"role": "user", "content": user_input}
     ]
     
-    country_risk_chat(user_input, country_conversation_history, country_wiki)
+    country_risk_chat(user_input, summarized_news, country_news, country_wiki)
 
   elif 'auditor' in assistant_msg:
     print(Fore.WHITE + "--Starting the auditor tool--")
@@ -98,23 +101,25 @@ country_conversation_history = [
 ]
 
 # Modify the country_risk_chat function
-def country_risk_chat(user_input, news_articles, country_wiki):
+def country_risk_chat(user_input, summarized_news, full_news, country_wiki):
+    # Show summarized news first
+    print(Fore.WHITE + f"Here's a summary of the latest news:\n{summarized_news}")
+
+    # Prepare assistant's message for risk assessment
     assistant_response = [
-        {"role": "assistant", "content": f"Here's the latest news related to {country_name}:\n{news_articles_str}"},
+        {"role": "system", "content": f"You are an expert in geopolitical and security analysis. For this risk assessment, consider the following summarized news and Wikipedia information:\n{summarized_news}\n{country_wiki[:200]}..."},
         {"role": "user", "content": user_input}
     ]
 
     # Use the assistant_response in the Chat API call
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4",
         messages=assistant_response,
         stream=False
     )
-
+    
     assistant_msg = response.choices[0].message['content']
-    country_conversation_history.append({"role": "assistant", "content": assistant_msg})
-
     print(Fore.WHITE + assistant_msg)
     print("\n")
-    user_input = input(Fore.BLUE + "-->")
-    country_risk_chat(user_input, None, None)  # Pass None for country_wiki during subsequent chat interactions
+    next_user_input = input(Fore.BLUE + "-->")
+    country_risk_chat(next_user_input, None, None, None)

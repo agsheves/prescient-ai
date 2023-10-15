@@ -74,55 +74,63 @@ def get_country_news_worldnews(country_name):
 
 
 ## Alternate news API
-def get_country_news_newsdata(country_name):
-    def search_news(api_key, text, number=10, language='en', prioritydomain='top'): 
-        url = "https://newsdata.io/api/1/news"
-        query = {
-            'apikey': api_key,
-            'qInTitle': text,
-            'prioritydomain': prioritydomain,
-            'language': language
-        }
-        response = requests.get(url, params=query)
-        
-        if response.status_code != 200:
-            return {"error": f"Request failed with status code {response.status_code}"}
+import requests
 
-        return response.json()
-
-    api_key = newsData_api_key
-    news_data = search_news(api_key, country_name, number=50)  # Adjust the number as needed
-    country_articles_list = []
+def search_news(api_key, country_name, number=50, language='en', prioritydomain='top'):
+    url = "https://newsdata.io/api/1/news"
+    query = {
+        'apikey': api_key,
+        'qInTitle': country_name,
+        'prioritydomain': prioritydomain,
+        'language': language
+    }
+    response = requests.get(url, params=query)
     
+    if response.status_code != 200:
+        return {"error": f"Request failed with status code {response.status_code}"}
+
+    return response.json()
+
+def process_news_data(news_data):
+    country_articles_list = []
     for news in news_data['results']:
-        title = news['title']
-        content = news['content']
-        summary = news['description']
-        link = news['link']
-        source = news['creator'][0] if news['creator'] else 'Unknown'
-        publication = news['source_id']
-        pubDate = news['pubDate']
-        article_id = news['article_id']
-        
-        country_articles_list.append({
-            'Headline': title,
-            'Source': source,
-            'Summary': summary,
-            'Link': link,
-            'pubDate': pubDate,
-            'article_id': article_id,
-            'publication': publication
-        })    
+        article = {
+            'Headline': news['title'],
+            'Source': news['creator'][0] if news['creator'] else 'Unknown',
+            'Summary': news['description'],
+            'Link': news['link'],
+            'pubDate': news['pubDate'],
+            'article_id': news['article_id'],
+            'publication': news['source_id']
+        }
+        country_articles_list.append(article)
+    
+    return country_articles_list
 
-    for news in country_articles_list:
-        print(f"Headline: {news['Headline']}")
-        print(f"Source: {news['Source']}")
-        print(f"Summary: {news['Summary']}")
-        print(f"Link: {news['Link']}")
-        print(f"Date: {news['pubDate']}")
-        print("\n")
+# Main function to get country news
+def get_country_news_newsdata(api_key, country_name):
+    news_data = search_news(api_key, country_name)
+    if "error" in news_data:
+        return news_data["error"]
+    
+    country_articles_list = process_news_data(news_data)
+    
+    return country_articles_list
 
-    news_articles_str = "\n".join([f"Headline: {article['Headline']}\nSource: {article['Source']}\nSummary: {article['Summary']}\nLink: {article['Link']}\nDate: {article['pubDate']}\n" for article in country_articles_list])
+def write_news_summary(country_articles_list):
+    news_summary = openai.ChatCompletion.create(
+        model="gpt-4",
+        temperature=0,
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a highly skilled AI trained in language comprehension and summarization. Your task is to summarize the following news articles, focusing on their relevance to country risk, security, and stability. Retain only the most important points to offer a clear, coherent summary. Avoid unnecessary details. Include the headlines and links for the most significant stories."
+            },
+            {
+                "role": "user",
+                "content": country_articles_list
+            }
+        ]
+    )
+    return news_summary['choices'][0]['message']['content']
 
-    return news_articles_str
-    print(news_articles_str)
