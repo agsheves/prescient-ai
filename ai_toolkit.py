@@ -8,6 +8,7 @@ from llama_index import wikipedia_search
 from llama_index import get_country_news_worldnews
 from llama_index import get_country_news_newsdata
 from llama_index import write_news_summary
+from llama_index import search_news
 import json
 
 with open('config.json', 'r') as config_file:
@@ -40,7 +41,7 @@ def task_routing(user_input):
     print(Fore.WHITE + "Staring the country risk tool...")
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
     country_wiki = wikipedia_search(country_name)
-    country_news = get_country_news_newsdata(country_name)
+    country_news = search_news(country_name)
     summarized_news = write_news_summary(country_news)
 
     
