@@ -20,16 +20,17 @@ with warnings.catch_warnings():
 with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
-openai.api_key = config_data['OPENAI_API_KEY']
-newsData_API = config_data['newsData_api_key']
+try:
+    openai.api_key = st.secrets['OPENAI_API_KEY']
+    newsData_API = st.secrets['newsData_api_key']
+except KeyError:
+    # Fallback to local config file
+    import config
+    openai.api_key = config_data['OPENAI_API_KEY']
+    newsData_API = config_data['newsData_api_key']
+
 api_key = newsData_API
 
-## Streamlit keys
-
-openai.api_key = st.secrets['OPENAI_API_KEY']
-newsData_API = st.secrets['newsData_api_key']
-
-api_key = newsData_API
 
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
 

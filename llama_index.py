@@ -14,12 +14,14 @@ with open('config.json', 'r') as config_file:
     config_data = json.load(config_file)
 
 
-worldnews_api_key = config_data['WORLD_NEWS_API_KEY']
-newsData_api_key = config_data['newsData_api_key']
-
-#Streamlit secrets
-worldnews_api_key = st.secrets['WORLD_NEWS_API_KEY']
-newsData_api_key = st.secrets['newsData_api_key']
+try:
+    worldnews_api_key = st.secrets['WORLD_NEWS_API_KEY']
+    newsData_api_key = st.secrets['newsData_api_key']
+except KeyError:
+    # Fallback to local config file
+    import config
+    worldnews_api_key = config_data['WORLD_NEWS_API_KEY']
+    newsData_api_key = config_data['newsData_api_key']
 
 
 #Wikipedia search
