@@ -1,38 +1,34 @@
-##main.py
+import streamlit as st
+from start import start  # Import your existing functions/modules
 
+# Initialize session state for conversation history
+if 'conversation_history' not in st.session_state:
+    st.session_state.conversation_history = []
 
-# Test bed for the main AI ERM components
-from utilities import Spinner
-import time
-from ai_toolkit import task_routing
-from ai_toolkit import default_chat
-from utilities import check_intent
-import datetime
-from colorama import init, Fore, Style
-import warnings
+# Your greeting and initial setup
+st.write("Startingthe risk management copilot")
+# ... other Streamlit setup like date, warnings, etc.
 
-init()
+# Text input for user message
+user_input = st.text_input("You: ")
 
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    # Your code that triggers the warning
+# Button to send message
+send_button = st.button("Send")
 
-now = datetime.datetime.now()
-now_formatted = now.strftime("%b-%d-%Y %H:%M")
-print('Welcome to the risk management copilot')
-with Spinner("Loading"):
-    time.sleep(2)
-print("\nFired up and ready to go\n")
-print(Fore.YELLOW + """Hi, I'm your risk managementcopilot, here to assist you with risk, security and crisis tasks.\n
-Every thing we do is via this chat interface but there's an extensive toolkit that I can deploy for you. This includes: country risk analysis, enterprise risk assessment, crisis preparadness and ERM compliance. There is also general chat and web search available.\n
-**Note**
-To make sure I am using the right tool for the job, I will periodically check that we are on the right track. Please correct me if I am going in the wrong direction. If you need to switch focus, e.g. from country risk to contigency planning, simply write 'SWITCH FOCUS' and I'll reorientate.\n
-Let's get started.\n""")
+# Display and handle chat
+if send_button:
+    # Append user's message to conversation history
+    st.session_state.conversation_history.append({"role": "user", "content": user_input})
 
-print("Please enter your name so we can get started")
-user_name = input(Fore.BLUE + "-->")
+    # Check user intent or route task
+    system_response, additional_info = your_functions(user_input)  # Replace with your existing logic
 
-check_intent(user_name)
+    # Append system's message to conversation history
+    st.session_state.conversation_history.append({"role": "system", "content": system_response})
 
-print(Fore.GREEN + f"\nLatest update as of {now_formatted}:\nTask routing component functioning. \nEnd of demo.")
-
+# Display the conversation history in Streamlit
+for message in st.session_state.conversation_history:
+    if message["role"] == "user":
+        st.write(f"You: {message['content']}")
+    else:
+        st.write(f"System: {message['content']}")
