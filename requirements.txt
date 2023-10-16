@@ -4,3 +4,5 @@ openai==0.27.10
 Requests==2.31.0
 wikipedia==1.4.0
 llama-index==0.8.41
+streamlit
+streamlit-chat
