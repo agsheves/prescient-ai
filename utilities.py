@@ -8,11 +8,6 @@ from colorama import init, Fore, Style
 import json
 
 
-with open('config.json', 'r') as config_file:
-    config_data = json.load(config_file)
-
-
-
 #Makes a loading spinner
 class Spinner:
     def __init__(self, message):
