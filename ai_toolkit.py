@@ -49,7 +49,7 @@ def task_routing(user_input):
   
   # Selects the specialized tool for the task or defaults to default main model
   if 'country risk analyst' in assistant_msg:
-    api_key = newsData_API
+    api_key = newsData_api_key
     print(Fore.WHITE + "Staring the country risk tool...")
     country_name = input(Fore.WHITE + "Please confirm the country name: ")
     run_country_analyst_persona(country_name)

@@ -1,4 +1,5 @@
 # utilities.py
+# Updated to include Streamlit options
 
 import itertools
 import threading
