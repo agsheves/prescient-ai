@@ -6,6 +6,12 @@ import time
 from ai_toolkit import task_routing
 from colorama import init, Fore, Style
 import json
+import os
+
+is_streamlit = os.getenv("IS_STREAMLIT", False)
+
+if is_streamlit:
+    import streamlit as st
 
 
 #Makes a loading spinner
@@ -32,9 +38,13 @@ class Spinner:
 
 # Checks the user intent to select the right model to use
 def check_intent(user_name):
-  print(Fore.WHITE + f"What can I help you with {user_name}?")
-  user_input = input(Fore.BLUE + "-->")
-  task_routing(user_input)
+  if is_streamlit:
+      user_input = st.text_input(f"What can I help you with {user_name}?")
+      task_routing(user_input)
+    else:
+        print(Fore.WHITE + f"What can I help you with {user_name}?")
+        user_input = input(Fore.BLUE + "-->")
+        task_routing(user_input)
 
 
 

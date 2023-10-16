@@ -11,6 +11,11 @@ import json
 import warnings
 import streamlit as st
 
+is_streamlit = os.getenv("IS_STREAMLIT", False)
+
+if is_streamlit:
+    import streamlit as st
+
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
