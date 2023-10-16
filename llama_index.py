@@ -9,20 +9,9 @@ import json
 import openai
 import streamlit as st
 
-# Open and read the config.json file
-with open('config.json', 'r') as config_file:
-    config_data = json.load(config_file)
-
-
-try:
-    worldnews_api_key = st.secrets['WORLD_NEWS_API_KEY']
-    newsData_api_key = st.secrets['newsData_api_key']
-except KeyError:
-    # Fallback to local config file
-    import config
-    worldnews_api_key = config_data['WORLD_NEWS_API_KEY']
-    newsData_api_key = config_data['newsData_api_key']
-
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+newsData_api_key = st.secrets["newsData_api_key"]
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
 #Wikipedia search
 def wikipedia_search(country_name):

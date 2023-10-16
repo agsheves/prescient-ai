@@ -16,20 +16,11 @@ with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     # Your code that triggers the warning
 
+openai_api_key = st.secrets["OPENAI_API_KEY"]
+newsData_api_key = st.secrets["newsData_api_key"]
+openai_api_key = st.secrets["OPENAI_API_KEY"]
 
-with open('config.json', 'r') as config_file:
-    config_data = json.load(config_file)
-
-try:
-    openai.api_key = st.secrets['OPENAI_API_KEY']
-    newsData_API = st.secrets['newsData_api_key']
-except KeyError:
-    # Fallback to local config file
-    import config
-    openai.api_key = config_data['OPENAI_API_KEY']
-    newsData_API = config_data['newsData_api_key']
-
-api_key = newsData_API
+api_key = newsData_api_key
 
 
 ai_tools = ['country risk analyst', 'auditor', 'general researcher']
