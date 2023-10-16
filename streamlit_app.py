@@ -3,13 +3,13 @@
 import streamlit as st
 from start import start  # Import your existing functions/modules
 
-# Your greeting and initial setup
-st.write("Streamlit is opening the risk management copilot")
-# ... other Streamlit setup like date, warnings, etc.
-
 # Initialize session state for conversation history
 if 'conversation_history' not in st.session_state:
     st.session_state.conversation_history = []
+
+# Your greeting and initial setup
+st.write("Streamlit is opening the risk management copilot")
+# ... other Streamlit setup like date, warnings, etc.
 
 # Text input for user message
 user_input = st.text_input("You: ")
