@@ -9,6 +9,7 @@ if 'conversation_history' not in st.session_state:
 
 # Your greeting and initial setup
 st.write("Streamlit is opening the risk management copilot")
+
 # ... other Streamlit setup like date, warnings, etc.
 
 # Text input for user message

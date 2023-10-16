@@ -38,7 +38,7 @@ class Spinner:
 
 # Checks the user intent to select the right model to use
 def check_intent(user_name):
-  if is_streamlit:
+    if is_streamlit:
       user_input = st.text_input(f"What can I help you with {user_name}?")
       task_routing(user_input)
     else:
